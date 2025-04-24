@@ -13,9 +13,10 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class VistaJuego extends View {
-    private Bitmap bmCesped1,bmCesped2; //almacenaran imagenes del cesped
+    private Bitmap bmCesped1,bmCesped2, bmSerpiente; //almacenaran imagenes del cesped
     private int h=25,w=12;
     private ArrayList<Cesped>arrCesped=new ArrayList<>();
+    private Serpiente serpiente;
     public static int tamañoMapa=75*Constantes.screenWidt/1080; //calculo tamaño de las celdas en funcion el ancho
     public VistaJuego(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -23,6 +24,9 @@ public class VistaJuego extends View {
         bmCesped1=Bitmap.createScaledBitmap(bmCesped1,tamañoMapa,tamañoMapa,true);
         bmCesped2= BitmapFactory.decodeResource(this.getResources(),R.drawable.grass03);
         bmCesped2=Bitmap.createScaledBitmap(bmCesped2,tamañoMapa,tamañoMapa,true);
+        bmSerpiente= BitmapFactory.decodeResource(this.getResources(),R.drawable.snake1);
+        bmSerpiente=Bitmap.createScaledBitmap(bmSerpiente,14*tamañoMapa,tamañoMapa,true);
+
         //generamos el mapa alternando celdas entre cesped1 y 2, formato tablero de ajedez
         for(int i=0;i<h;i++){
             for(int j=0; j<w;j++){
@@ -35,14 +39,17 @@ public class VistaJuego extends View {
                 }
             }
         }
+        serpiente=new Serpiente(bmSerpiente,arrCesped.get(126).getX(),arrCesped.get(126).getY(),4);
     }
+
 
     @Override
     public void draw(@NonNull Canvas canvas) { //dibujamos fondo verde oscuro
-        super.draw(canvas);
-        canvas.drawColor(0xFF1A6100);
-        for (int i=0;i<arrCesped.size();i++){
+        super.draw(canvas); //llama al dibujo por defecto
+        canvas.drawColor(0xFF1A6100); //fondo verde oscuro
+        for (int i=0;i<arrCesped.size();i++){  //dibujar el cesped
             canvas.drawBitmap(arrCesped.get(i).getBm(),arrCesped.get(i).getX(),arrCesped.get(i).getY(),null);
         }
+        serpiente.draw(canvas);  //dibujar serpiente
     }
 }
